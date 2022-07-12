@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { MyContext } from "../../../../context/context";
 import useGetViewCustomer from "../../../../hooks/sales/costumer/use-viewcustomer";
 import Axios from "axios";
@@ -11,6 +11,7 @@ function EditCustomer() {
   const { id } = useParams();
   const getDataUser = useGetViewCustomer(id);
   const url = `https://stormy-garden-64397.herokuapp.com/customers/${id}.json`;
+  const navigate = useNavigate();
 
   // inisialisasi state
 
@@ -31,7 +32,7 @@ function EditCustomer() {
     console.log(newData);
   }
 
-  function onSubmit(e) {
+  const onSubmit = async (e) => {
     e.preventDefault();
     fetch(url, {
       method: "PUT",
@@ -44,11 +45,17 @@ function EditCustomer() {
       .then((res) => res.json())
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-  }
+
+    alert("Data Berhasil Diubah!");
+  };
 
   function onClickAlert(e) {
     alert("Data Berhasil Diubah!");
   }
+
+  const navigateViewCustomer = () => {
+    navigate("/viewcustomer/" + id);
+  };
 
   return (
     <div className="App-header">
@@ -107,11 +114,7 @@ function EditCustomer() {
 
             <button
               className="ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              to={{
-                pathname: `/viewcustomer/${id}`,
-              }}
-              href={`/viewcustomer/${id}`}
-              onClick={(e) => onClickAlert(e)}
+              onClick={(e) => onSubmit(e).then(navigateViewCustomer)}
             >
               Submit
             </button>

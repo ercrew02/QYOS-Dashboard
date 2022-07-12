@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
 import { MyContext } from "../../../../context/context";
 import useGetViewProduct from "../../../../hooks/sales/product/use-viewproduct";
 import axios from "axios";
@@ -16,6 +16,7 @@ function EditProduct() {
   const [category, setCategory] = useState("");
   const [detail, setDetail] = useState("");
   const [variant, setVariant] = useState("");
+  const navigate = useNavigate();
 
   const getPostById = async () => {
     const response = await axios.get(url);
@@ -52,6 +53,10 @@ function EditProduct() {
       .catch((err) => console.log(err));
 
     alert("Data Berhasil Diubah!");
+  };
+
+  const navigateView = () => {
+    navigate("/viewproduct/" + id);
   };
 
   return (
@@ -202,6 +207,7 @@ function EditProduct() {
               pathname: `/viewproduct/${id}`,
             }}
             href={`/viewproduct/${id}`}
+            onClick={(e) => updatePost(e).then(navigateView)}
           >
             Submit
           </button>
